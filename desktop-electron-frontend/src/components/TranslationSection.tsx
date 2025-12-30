@@ -75,6 +75,8 @@ const TranslationSection = () => {
     // Get the form values
     const sourceContent = form.getValues('sourceArticleContent')
     const translatedContent = form.getValues('translatedArticleContent')
+    const sourceUrl = form.getValues('sourceArticleUrl')
+    const targetLanguage = form.getValues('targetArticleLanguage')
     
     // Navigate to comparison section using phase navigation
     const comparisonButton = document.querySelector('button[onClick*="Phase.AI_COMPARISON"]') as HTMLElement
@@ -85,7 +87,9 @@ const TranslationSection = () => {
     // Store the data in sessionStorage for the comparison section to access
     sessionStorage.setItem('comparisonData', JSON.stringify({
       sourceContent,
-      translatedContent
+      translatedContent,
+      sourceUrl,
+      targetLanguage
     }))
   }, [form])
 
@@ -298,6 +302,7 @@ const TranslationSection = () => {
                 onClick={() => { 
                   console.log("Clear button clicked")
                   setTexts([]) // Clear the texts state
+                  form.setValue('sourceArticleUrl', '')
                   form.setValue('sourceArticleContent', '')
                   form.setValue('translatedArticleContent', '')
                 }}

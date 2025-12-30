@@ -14,6 +14,7 @@ config = Config(".env")
 
 LOG_LEVEL = config.get("LOG_LEVEL", default="INFO")
 FASTAPI_DEBUG = config.get("FASTAPI_DEBUG", cast=bool, default=False)
+SIMILARITY_THRESHOLD = config.get("SIMILARITY_THRESHOLD", cast=float, default=0.65)
 
 comparison_models = [
     "sentence-transformers/LaBSE",

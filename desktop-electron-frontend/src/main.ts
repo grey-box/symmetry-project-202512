@@ -43,8 +43,8 @@ ipcMain.handle('start-backend', async () => {
     
     // Start the backend from the correct directory
     console.log("[INFO] Starting backend API from renderer request...")
-    execFile('python3', ['app/main.py'], {
-      cwd: path.join(process.cwd(), '../backend-fastapi'),
+    execFile('python3', ['-m', 'uvicorn', 'app.main:app', '--host', '127.0.0.1', '--port', '8000'], {
+      cwd: path.join(process.cwd(), '../symmetry-unified-backend'),
       timeout: 10000
     }, (error: any, stdout: any, stderr: any) => {
       if (error) {
@@ -95,8 +95,8 @@ const createWindow = async () => {
     backendDir = path.join(process.resourcesPath, '..');
   } else {
     // For development, run the Python script directly from the correct directory
-    backendPath = path.join(process.cwd(), '../backend-fastapi/app/main.py');
-    backendDir = path.join(process.cwd(), '../backend-fastapi');
+    backendPath = path.join(process.cwd(), '../symmetry-unified-backend/app/main.py');
+    backendDir = path.join(process.cwd(), '../symmetry-unified-backend');
   }
   console.log(`[INFO] backendPath: ${backendPath}`)
   console.log(`[INFO] backendDir: ${backendDir}`)
@@ -122,7 +122,7 @@ const createWindow = async () => {
         
         // Start the backend from the correct directory
         console.log("[INFO] Starting backend API from correct directory...")
-        execFile('python3', ['app/main.py'], {
+        execFile('python3', ['-m', 'uvicorn', 'app.main:app', '--host', '127.0.0.1', '--port', '8000'], {
           cwd: backendDir,
           timeout: 10000
         }, (error: any, stdout: any, stderr: any) => {

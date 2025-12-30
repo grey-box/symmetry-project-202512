@@ -76,6 +76,18 @@ setup_python_env() {
     echo "  📦 Installing Python dependencies..."
     ./venv/bin/pip install -r requirements.txt
     
+    # Install spaCy language models if not already installed
+    echo "  🌍 Checking spaCy language models..."
+    models=("en_core_web_sm" "fr_core_news_sm" "de_core_news_sm" "es_core_news_sm" "it_core_news_sm" "pt_core_news_sm" "nl_core_news_sm")
+    for model in "${models[@]}"; do
+        if ! ./venv/bin/python -c "import spacy; spacy.load('$model')" 2>/dev/null; then
+            echo "    Installing $model..."
+            ./venv/bin/python -m spacy download "$model" -q
+        else
+            echo "    $model already installed"
+        fi
+    done
+    
     # Install PyInstaller if not already installed
     if ! ./venv/bin/pip show pyinstaller >/dev/null 2>&1; then
         echo "  📦 Installing PyInstaller..."
@@ -91,8 +103,8 @@ build_python_executable() {
     
     cd app
     
-    # Build with PyInstaller
-    pyinstaller -F main.py
+    # Build with PyInstaller (suppress deprecation warnings)
+    PYTHONWARNINGS=ignore::DeprecationWarning,ignore::FutureWarning pyinstaller -F main.py --log-level=WARN
     
     echo "  ✅ Python executable built"
 }

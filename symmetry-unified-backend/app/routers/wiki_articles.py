@@ -1,7 +1,7 @@
 import logging
 import asyncio
 import urllib.request
-from urllib.parse import urlparse
+from urllib.parse import urlparse, unquote
 from urllib.error import URLError
 from typing import Dict, Optional, Annotated
 
@@ -121,7 +121,7 @@ def _extract_wiki_title(url: str) -> str:
             title = title[0:index]
             break
 
-    return title.replace("_", " ")
+    return unquote(title.replace("_", " "))
 
 
 async def validate_language_code(language_code: str):
