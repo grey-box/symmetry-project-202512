@@ -21,27 +21,34 @@
 - [npm](https://www.npmjs.com/)
 
 ### Installation
+
+#### Backend
 ```bash
-# Clone the repository
-git clone https://github.com/grey-box/Project-Symmetry-AI
-cd Project-Symmetry-AI
+# Navigate to backend
+cd symmetry-unified-backend
 
-# Install frontend dependencies
-cd ui
-npm install
+# Quick start (recommended)
+./start.sh
 
-# Setup backend
-cd ../backend-fastapi
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-pip install -r requirements.txt
-
-# Run the application
-cd ../ui
-npm run start
+# This will:
+# 1. Create virtual environment if needed
+# 2. Install dependencies
+# 3. Start server at http://127.0.0.1:8000
 ```
 
-For detailed installation instructions, platform-specific guides, and troubleshooting, see [INSTALLATION.md](INSTALLATION.md).
+Access interactive API documentation at: http://127.0.0.1:8000/docs
+
+#### Frontend
+```bash
+# Navigate to frontend
+cd desktop-electron-frontend
+
+# Install dependencies
+yarn install
+
+# Run development
+yarn start
+```
 
 ## 📖 Project Overview
 
@@ -51,65 +58,363 @@ The application helps identify critical information lost or added during transla
 
 Currently focused on Wikipedia content; future expansion to other internet content and AI-powered translation for underrepresented languages.
 
-For detailed project objectives, architecture, working principles, and development status, see [guide/SymmetryAI-Guide.md](guide/SymmetryAI-Guide.md).
-
 ## 📊 Features
 
 - **🌍 Wikipedia Translation**: Translate articles between languages
 - **🔍 Semantic Comparison**: Identify gaps and additions in translations using AI models
 - **📊 Gap Analysis**: Detect missing/extra information with color-coded results
 - **🎯 Language Support**: Focus on underrepresented languages
-- **⚡ FastAPI Backend**: RESTful API with automatic documentation
-- **🖥️ Electron Frontend**: Cross-platform desktop application
+- **📝 Structured Articles**: Section-by-section content with citations and references
 - **🤖 AI-Powered**: LLM-based semantic understanding with models like LaBSE, XLM-RoBERTa
-- **📈 Analytics**: Translation quality metrics and data analytics
+- **📈 Analytics**: Translation quality metrics and structural analysis
+- **🧪 Testing**: Comprehensive test suite with 97% coverage
 
 ## 🏗️ Project Structure
 
 ```
-Project-Symmetry-AI/
-├── backend-fastapi/          # FastAPI backend
+symmetry-project-202512/
+├── symmetry-unified-backend/   # FastAPI backend
 │   ├── app/
-│   │   ├── main.py           # Main application entry point
 │   │   ├── ai/               # AI and ML components
 │   │   │   ├── semantic_comparison.py
 │   │   │   ├── llm_comparison.py
 │   │   │   └── translations.py
-│   │   ├── api/              # API endpoints
-│   │   │   ├── wiki_article.py
+│   │   ├── models/           # Pydantic v2 models
+│   │   ├── routers/          # API route handlers
+│   │   │   ├── wiki_articles.py
+│   │   │   ├── structured_wiki.py
 │   │   │   ├── comparison.py
-│   │   │   └── cache.py
-│   │   ├── model/            # Data models
-│   │   │   ├── request.py
-│   │   │   └── response.py
-│   │   └── prompts/          # AI prompts
-├── ui/                       # Electron + React frontend
+│   │   │   └── structural_analysis.py
+│   │   ├── services/         # Business logic
+│   │   │   ├── article_parser.py
+│   │   │   ├── cache.py
+│   │   │   └── wiki_utils.py
+│   │   ├── prompts/          # LLM prompts
+│   │   └── main.py
+│   ├── tests/                # Test suite
+│   └── requirements.txt
+├── desktop-electron-frontend/ # Electron + React frontend
 │   ├── src/
 │   │   ├── components/       # React components
-│   │   │   ├── TranslationSection.tsx
-│   │   │   ├── ComparisonSection.tsx
-│   │   │   ├── Navbar.tsx
-│   │   │   └── Layout.tsx
 │   │   ├── services/         # API services
-│   │   │   ├── fetchArticle.ts
-│   │   │   ├── translateArticle.ts
-│   │   │   └── compareArticles.ts
 │   │   ├── models/           # TypeScript interfaces
 │   │   ├── constants/        # Application constants
 │   │   ├── context/          # React context
 │   │   └── pages/            # Page components
-├── T5-finetuned/             # Fine-tuned T5 model
-├── guide/                    # Project documentation
-└── extras/                   # Resources
+│   └── package.json
+└── README.md
 ```
+
+## 🔧 Installation Guide
+
+### System Requirements
+- **Operating System**: Windows 10+, Ubuntu 20.04+, or macOS 10.15+
+- **Memory**: Minimum 4GB RAM (8GB recommended)
+- **Storage**: Minimum 2GB free space
+- **Internet Connection**: Required for downloading dependencies
+
+### Software Requirements
+- **Node.js**: Version 18.0 or higher (LTS recommended)
+- **Python**: Version 3.8 - 3.11 (NLP library requirements prevent 3.12)
+- **npm**: Version 8.0 or higher (comes with Node.js)
+- **Git**: Latest version
+
+### Manual Installation
+
+#### Backend
+```bash
+cd symmetry-unified-backend
+
+# Create virtual environment
+python3 -m venv venv
+source venv/bin/activate  # On Windows: .\venv\Scripts\activate
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Configure environment
+cp .env.template .env
+# Edit .env as needed (LOG_LEVEL, FASTAPI_DEBUG)
+```
+
+#### Frontend
+```bash
+cd desktop-electron-frontend
+
+# Install dependencies
+yarn install
+
+# Verify installation
+yarn list --depth=0
+```
+
+### Running the Application
+
+#### Development Mode
+```bash
+# Backend (with hot reload)
+cd symmetry-unified-backend
+source venv/bin/activate
+uvicorn app.main:app --reload --host 127.0.0.1 --port 8000
+
+# Frontend
+cd desktop-electron-frontend
+yarn start
+```
+
+#### Production Mode
+```bash
+# Backend
+cd symmetry-unified-backend
+source venv/bin/activate
+uvicorn app.main:app --host 127.0.0.1 --port 8000 --workers 4
+
+# Frontend - package for distribution
+cd desktop-electron-frontend
+yarn package
+```
+
+## 🤝 Contributing
+
+Thank you for your interest in contributing to Project Symmetry!
+
+### Getting Started
+
+1. Fork the repository
+2. Create a feature branch
+3. Install dependencies (see Installation Guide)
+4. Make your changes
+5. Run tests
+6. Submit a pull request
+
+### Code Standards
+
+#### Python Backend
+- Use PEP 8 style guidelines (88 char max line length)
+- 4 spaces for indentation
+- Type hints for all functions
+- Docstrings for public functions
+- PEP 8 naming conventions (snake_case)
+
+#### JavaScript/TypeScript Frontend
+- ESLint and Prettier configuration
+- 2 spaces for indentation
+- Components: PascalCase
+- Services/Utilities: camelCase
+- Types: PascalCase
+
+### Testing
+
+#### Backend
+```bash
+cd symmetry-unified-backend
+source venv/bin/activate
+pytest
+```
+
+Test coverage: 60 tests, 97% pass rate
+
+#### Frontend
+```bash
+cd desktop-electron-frontend
+yarn test
+```
+
+### Development Workflow
+
+```bash
+# Always pull latest changes
+git fetch upstream
+git rebase upstream/main
+
+# Create feature branch
+git checkout -b feature/your-feature-name
+
+# Make changes and test
+cd symmetry-unified-backend && pytest
+cd ../desktop-electron-frontend && yarn test
+
+# Commit and push
+git add .
+git commit -m "feat: description of changes"
+git push origin feature/your-feature-name
+
+# Create pull request
+gh pr create --title "Feature Title" --body "Description..."
+```
+
+### Pull Request Checklist
+- [ ] Code follows project standards
+- [ ] Tests pass (backend and frontend)
+- [ ] Documentation updated
+- [ ] No breaking changes (unless documented)
+- [ ] Commit messages follow conventional format
 
 ## 📚 Documentation
 
-- **[INSTALLATION.md](INSTALLATION.md)** - Complete setup instructions for all platforms
-- **[guide/SymmetryAI-Guide.md](guide/SymmetryAI-Guide.md)** - Comprehensive project overview, architecture, and development details
-- **[api-documentation.md](api-documentation.md)** - Complete API reference with examples
-- **[CONTRIBUTING.md](CONTRIBUTING.md)** - Guidelines for contributing, development workflow, and code standards
-- **[LEARN.md](LEARN.md)** - Prerequisites and learning resources for contributors
+### Main Documentation
+- **Installation Guide** - See Installation section above
+- **Contributing Guide** - See Contributing section above
+- **Backend README** - [symmetry-unified-backend/README.md](symmetry-unified-backend/README.md)
+- **Frontend README** - [desktop-electron-frontend/README.md](desktop-electron-frontend/README.md)
+
+### API Documentation
+Interactive API documentation available at http://127.0.0.1:8000/docs when backend is running.
+
+### Key API Endpoints
+
+#### Wiki Articles
+- `GET /symmetry/v1/wiki/articles` - Fetch Wikipedia article
+- `GET /symmetry/v1/wiki/structured-article` - Get structured article with sections, citations, references
+- `GET /symmetry/v1/wiki/structured-section` - Get specific section with metadata
+- `GET /symmetry/v1/wiki/citation-analysis` - Analyze citations
+- `GET /symmetry/v1/wiki/reference-analysis` - Analyze references
+- `GET /wiki_translate/source_article` - Get translated article
+
+#### Comparison
+- `POST /symmetry/v1/articles/compare` - Compare two articles (traditional semantic)
+- `GET /symmetry/v1/comparison/llm` - LLM comparison (GET)
+- `POST /symmetry/v1/comparison/llm` - LLM comparison (POST)
+- `GET /symmetry/v1/comparison/semantic` - Semantic comparison (GET)
+- `POST /symmetry/v1/comparison/semantic` - Semantic comparison (POST)
+
+#### Structural Analysis
+- `GET /operations/{source_language}/{title}` - Analyze article across 6 languages with quality scoring
+
+## 🧪 Testing
+
+### Backend Testing
+
+Run all tests:
+```bash
+cd symmetry-unified-backend
+pytest
+```
+
+Run specific test file:
+```bash
+pytest tests/test_wiki_articles.py
+```
+
+Run with coverage:
+```bash
+pytest --cov=app --cov-report=html
+```
+
+Run with verbose output:
+```bash
+pytest -v
+```
+
+### Test Coverage
+
+- **Total Tests**: 60
+- **Passing**: 58 (97%)
+- **Test Categories**: Wiki articles, comparison, structured wiki, structural analysis
+- **Test Time**: ~0.07s
+
+### Test Data
+
+Sample article texts in `tests/data/`:
+- `obama_A.txt` and `obama_B.txt`: For comparison tests
+- `missingno_en.txt` and `missingno_fr.txt`: Multi-language tests
+
+## 🎓 Learning Resources
+
+### Prerequisites
+
+#### Git and GitHub
+- [GitHub Guides](https://guides.github.com/)
+- [Pro Git Book](https://git-scm.com/book/)
+
+#### Python Development
+- [Python Documentation](https://docs.python.org/3/)
+- [FastAPI Tutorial](https://fastapi.tiangolo.com/tutorial/)
+- [pytest Documentation](https://docs.pytest.org/)
+
+#### JavaScript/TypeScript Development
+- [TypeScript Documentation](https://www.typescriptlang.org/docs/)
+- [React Documentation](https://reactjs.org/docs/)
+- [Electron Documentation](https://www.electronjs.org/docs)
+
+### Recommended Learning Path
+
+1. **Week 1**: Set up development environment and understand project structure
+2. **Week 2**: Study the existing codebase and run the application
+3. **Week 3**: Make small contributions (documentation, bug fixes)
+4. **Week 4**: Work on a feature under mentorship
+5. **Week 5+**: Contribute independently and help others
+
+## 🔍 Areas for Contribution
+
+### High Priority
+- **🌍 Translation Improvements**: Add support for more languages, improve accuracy
+- **🔍 Semantic Analysis**: Enhance comparison algorithms, add more models
+- **🧪 Testing**: Increase test coverage, add integration tests
+
+### Medium Priority
+- **🖥️ UI/UX Improvements**: Redesign components, add dark mode
+- **⚡ Performance**: Optimize API responses, reduce memory usage
+- **📚 Documentation**: Update API documentation, add tutorials
+
+### Low Priority
+- **🔧 DevOps**: Set up CI/CD pipeline, add monitoring
+- **🎨 Design**: Update icons and logos, improve visual consistency
+
+## 🐛 Troubleshooting
+
+### Backend Issues
+
+#### "python3: command not found"
+Edit `start.sh` and change `python3` to `python`.
+
+#### Permission denied on start.sh
+```bash
+chmod +x start.sh
+```
+
+#### Virtual environment issues
+Rebuild from scratch:
+```bash
+deactivate
+rm -rf venv/
+./start.sh
+```
+
+#### Ollama not running for LLM comparison
+```bash
+ollama serve
+# In another terminal:
+ollama pull deepseek-r1
+```
+
+### Frontend Issues
+
+#### npm install fails
+```bash
+# Clear cache and reinstall
+yarn cache clean
+rm -rf node_modules
+yarn install
+```
+
+#### Port already in use
+```bash
+# Find and kill process
+lsof -ti:8000 | xargs kill -9
+lsof -ti:3000 | xargs kill -9
+```
+
+### Platform-Specific Issues
+
+#### Windows
+- Add exception in Windows Defender
+- Allow connections through Windows Firewall
+- Ensure Python and Node.js are in PATH
+
+#### Linux/macOS
+- Ensure OpenGL ES 2.0 or higher
+- Fix permissions: `chmod +x start.sh`
 
 ## 🤝 Community
 
@@ -130,6 +435,6 @@ This project is licensed under the appropriate license. See the [LICENSE](LICENS
 
 ---
 
-**Last Updated**: November 2024  
+**Last Updated**: December 2025  
 **Version**: 1.0.0  
 **Maintainers**: [grey-box](https://github.com/grey-box)
